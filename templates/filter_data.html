@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>数据过滤查询</title>
+</head>
+<body>
+  <h1>数据过滤查询</h1>
+  <form method="post" enctype="multipart/form-data">
+    <label for="data">Upload main XLSM File:</label>
+    <input type="file" name="data" id="data" accept=".xlsm" required>
+    <label for="column">选择过滤列:</label>
+    <select id="column" name="column" required>
+      {% for col in columns %}
+        <option value="{{ col }}">{{ col }}</option>
+      {% endfor %}
+    </select>
+    <br><br>
+    <label for="value">输入过滤值:</label>
+    <input type="text" id="value" name="value" required>
+    <button type="submit">查询</button>
+  </form>
+
+  {% if results %}
+    <h2>查询结果:</h2>
+    <table border="1">
+      <tr>
+        {% for col in columns %}
+          <th>{{ col }}</th>
+        {% endfor %}
+      </tr>
+      {% for row in results %}
+      <tr>
+        {% for col in columns %}
+          <td>{{ row[col] }}</td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </table>
+  {% else %}
+    {% if request.method == "POST" %}
+      <p>未找到符合条件的记录。</p>
+    {% endif %}
+  {% endif %}
+</body>
+</html>
